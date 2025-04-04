@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useParams } from "next/navigation"
+import { PermissionAwareButton } from "@/components/PermissionAwareButton"
 
 export default function EvidenceDetailPage() {
   const [verifying, setVerifying] = useState(false)
@@ -173,11 +174,20 @@ export default function EvidenceDetailPage() {
               </Card>
 
               <div className="flex justify-end gap-2">
-                <Button variant="outline" className="gap-2">
+                <PermissionAwareButton 
+                  permission="download_evidence"
+                  variant="outline" 
+                  className="gap-2"
+                >
                   <Download className="h-4 w-4" />
                   Download Evidence
-                </Button>
-                <Button className="gap-2" onClick={handleVerify} disabled={verifying || verified}>
+                </PermissionAwareButton>
+                <PermissionAwareButton
+                  permission="verify_evidence"
+                  className="gap-2" 
+                  onClick={handleVerify} 
+                  disabled={verifying || verified}
+                >
                   {verifying ? (
                     <>
                       <Clock className="h-4 w-4 animate-spin" />
@@ -194,7 +204,7 @@ export default function EvidenceDetailPage() {
                       Verify Integrity
                     </>
                   )}
-                </Button>
+                </PermissionAwareButton>
               </div>
 
               {verified && (

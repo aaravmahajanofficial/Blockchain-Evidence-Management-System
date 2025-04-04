@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { PermissionAwareButton } from "@/components/PermissionAwareButton"
+import { PermissionGuard } from "@/components/PermissionGuard"
 
 // Sample evidence data
 const evidenceData = [
@@ -205,10 +207,12 @@ export default function EvidencePage() {
                               <span className="sr-only">View Details</span>
                             </Button>
                           </Link>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <Download className="h-4 w-4" />
-                            <span className="sr-only">Download</span>
-                          </Button>
+                          <PermissionGuard permission="download_evidence">
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <Download className="h-4 w-4" />
+                              <span className="sr-only">Download</span>
+                            </Button>
+                          </PermissionGuard>
                         </div>
                       </TableCell>
                     </TableRow>

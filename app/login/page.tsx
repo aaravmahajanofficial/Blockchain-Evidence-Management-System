@@ -10,17 +10,57 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { UserRole } from "@/types"
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault()
     setIsLoading(true)
-    // Simulate login process
+    
+    // Demo credentials for testing
+    const demoCredentials = [
+      { email: "admin@example.com", password: "admin123", role: "administrator" as UserRole, name: "Admin User" },
+      { email: "investigator@example.com", password: "invest123", role: "forensic_investigator" as UserRole, name: "Investigator User" },
+      { email: "casemanager@example.com", password: "case123", role: "case_manager" as UserRole, name: "Case Manager User" },
+      { email: "reviewer@example.com", password: "review123", role: "evidence_reviewer" as UserRole, name: "Evidence Reviewer User" },
+      { email: "auditor@example.com", password: "audit123", role: "auditor" as UserRole, name: "Auditor User" }
+    ]
+    
+    // In a real application, you would validate against a database/API
     setTimeout(() => {
       setIsLoading(false)
-      window.location.href = "/dashboard"
+      
+      // Find matching credentials
+      const user = demoCredentials.find(cred => cred.email === email && cred.password === password)
+      
+      if (user) {
+        // Store user info with role in localStorage
+        localStorage.setItem('user', JSON.stringify({
+          name: user.name,
+          email: user.email,
+          role: user.role
+        }))
+        
+        // For now, route all non-admin users to investigator dashboard
+        // In a full implementation, we would have separate dashboards for each role
+        if (user.role === "administrator") {
+          window.location.href = "/dashboard/admin"
+        } else {
+          window.location.href = "/dashboard/investigator"
+        }
+      } else {
+        // Show error for invalid credentials
+        alert("Invalid credentials. Try one of the demo accounts:\n" +
+          "admin@example.com/admin123\n" +
+          "investigator@example.com/invest123\n" +
+          "casemanager@example.com/case123\n" +
+          "reviewer@example.com/review123\n" +
+          "auditor@example.com/audit123")
+      }
     }, 1500)
   }
 
@@ -29,7 +69,13 @@ export default function LoginPage() {
     // Simulate wallet connection
     setTimeout(() => {
       setIsLoading(false)
-      window.location.href = "/dashboard"
+      // For demo purposes, wallet connects as forensic investigator
+      localStorage.setItem('user', JSON.stringify({
+        name: "Wallet User",
+        address: "0x1234...5678",
+        role: "forensic_investigator"
+      }))
+      window.location.href = "/dashboard/investigator"
     }, 1500)
   }
 
@@ -59,7 +105,14 @@ export default function LoginPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="name@example.com" required />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      placeholder="name@example.com" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required 
+                    />
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -68,7 +121,13 @@ export default function LoginPage() {
                         Forgot password?
                       </Link>
                     </div>
-                    <Input id="password" type="password" required />
+                    <Input 
+                      id="password" 
+                      type="password" 
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required 
+                    />
                   </div>
                 </CardContent>
                 <CardFooter>
