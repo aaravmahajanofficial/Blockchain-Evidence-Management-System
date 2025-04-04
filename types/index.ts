@@ -21,7 +21,8 @@ export type FeaturePermission =
   | 'link_evidence_to_cases'
   | 'view_audit_trail'
   | 'view_system_metrics' 
-  | 'generate_reports';
+  | 'generate_reports'
+  | 'assign_investigators';
 
 // User data structure
 export interface UserData {
@@ -48,7 +49,8 @@ export const PERMISSION_MATRIX: Record<UserRole, FeaturePermission[]> = {
     'link_evidence_to_cases',
     'view_audit_trail',
     'view_system_metrics',
-    'generate_reports'
+    'generate_reports',
+    'assign_investigators'
   ],
   forensic_investigator: [
     'upload_evidence',
@@ -69,7 +71,8 @@ export const PERMISSION_MATRIX: Record<UserRole, FeaturePermission[]> = {
     'manage_cases',
     'link_evidence_to_cases',
     'view_audit_trail',
-    'generate_reports'
+    'generate_reports',
+    'assign_investigators'
   ],
   evidence_reviewer: [
     'view_evidence',
